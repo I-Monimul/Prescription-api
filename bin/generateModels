@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+require_once(__DIR__ . '/../src/vendor/autoload.php');
+
+$config = [
+    'output'    => __DIR__ . '/../src/app/Models/Base/',
+    'DB'        => require __DIR__ . "/../src/app/config/_db.php",
+    'namespace' => 'Models\\Base',
+    'extends'   => '\\Models\\Base',
+    'relationNamespace' => '\\Models\Base\\',
+    'template' => __DIR__ . '/../config/model_template.stub',
+    'exclude_connectors' => false,
+    'exclude' => ['migrations']
+];
+
+$generator = new \Ekhaled\Generators\MySQL\Model($config);
+$generator->generate();

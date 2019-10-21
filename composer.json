@@ -1,0 +1,18 @@
+{
+    "scripts":{
+        "mig": "src\\vendor\\bin\\phpmig",
+        "generateModels": "php bin/generateModels"
+    },
+    "require": {
+        "bcosca/fatfree-core": "3.5.1",
+        "ikkez/f3-cortex": "1.4.1",
+        "davedevelopment/phpmig": "^1.2",
+        "pimple/pimple": "~3.0",
+        "ekhaled/f3-cortex-model-generator": "1.2",
+        "knplabs/knp-snappy": "^0.4.3",
+        "mpdf/mpdf": "^8.0.0"
+    },
+    "config": {
+        "vendor-dir": "src/vendor"
+    }
+}

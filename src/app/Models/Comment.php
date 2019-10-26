@@ -21,7 +21,8 @@ class Comment extends \Models\Base\Comment
 	public static function post($data)
 	{
 		$model = new self;
-		$model->comment = $data['comment'];
+		$model->comment = ucwords($data['comment']);
+		$model->alternative = ucwords($data['alternative']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +32,8 @@ class Comment extends \Models\Base\Comment
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->comment = $data['comment'];
+		$model->comment = ucwords($data['comment']);
+		$model->alternative = ucwords($data['alternative']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

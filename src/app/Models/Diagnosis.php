@@ -21,7 +21,7 @@ class Diagnosis extends \Models\Base\Diagnosis
 	public static function post($data)
 	{
 		$model = new self;
-		$model->diagnosis = $data['diagnosis'];
+		$model->diagnosis = ucwords($data['diagnosis']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +31,7 @@ class Diagnosis extends \Models\Base\Diagnosis
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->diagnosis = $data['diagnosis'];
+		$model->diagnosis = ucwords($data['diagnosis']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

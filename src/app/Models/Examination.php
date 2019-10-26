@@ -21,7 +21,7 @@ class Examination extends \Models\Base\Examination
 	public static function post($data)
 	{
 		$model = new self;
-		$model->examination = $data['examination'];
+		$model->examination = ucwords($data['examination']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +31,7 @@ class Examination extends \Models\Base\Examination
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->examination = $data['examination'];
+		$model->examination = ucwords($data['examination']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

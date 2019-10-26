@@ -12,6 +12,9 @@ use \Models\Complaint as Complaint;
 use \Models\Examination as Examination;
 use \Models\Investigation as Investigation;
 use \Models\Diagnosis as Diagnosis;
+use \Models\Advice as Advice;
+use \Models\Next_visit as Next_visit;
+use \Models\Referee as Referee;
 
 class Pdf
 {
@@ -34,17 +37,81 @@ class Pdf
 				$result_medicine = $result->medicine;
 				$time = new Time;
 				$result = $time->load(array('id = ? AND deleted = 0', $times[$i]));
-				$result_time = $result->time;
+				if($result->alternative){
+					$result_time = $result->alternative;
+				}
+				else{
+					$result_time = $result->time;
+				}
 				$comment = new Comment;
 				$result = $comment->load(array('id = ? AND deleted = 0', $comments[$i]));
-				$result_comment = $result->comment;
+				if($result->alternative){
+					$result_comment = $result->alternative;
+				}
+				else{
+					$result_comment = $result->comment;
+				}
 				$duration = new Duration;
 				$result = $duration->load(array('id = ? AND deleted = 0', $durations[$i]));
-				$result_duration = $result->duration;
+				if($result->alternative){
+					$result_duration = $result->alternative;
+				}
+				else{
+					$result_duration = $result->duration;
+				}
 
 				$medicines_html .= '<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $result_medicine . '</td><td>' . $result_time . '</td><td>' . $result_comment . '</td><td>' . $result_duration . '</td></tr>';
 			}
 			//prs
+
+			//oth
+			$advices_html = "<tr><td><h3>Advices</h3></td></tr>";
+			if($model->advices){
+				$advices = explode(',', $model->advices);
+				for ($i = 0; $i < count($advices); $i++) {
+					$advice = new Advice;
+					$result = $advice->load(array('id = ? AND deleted = 0', $advices[$i]));
+					if($result->alternative){
+						$result_advice = $result->alternative;
+					}
+					else{
+						$result_advice = $result->advice;
+					}
+
+					$advices_html .= '<tr><td>' . $result_advice . '</td></tr>';
+				}
+			}
+			else{
+				$advices_html = "";
+			}
+
+			if($model->next_visit){
+					$next_visit = new Next_visit;
+					$result = $next_visit->load(array('id = ? AND deleted = 0', $model->next_visit));
+					if($result->alternative){
+						$result_next_visit = $result->alternative;
+					}
+					else{
+						$result_next_visit = $result->next_visit;
+					}
+
+					$next_visit_html = '<tr><td><h3>পরবর্তী সাক্ষাৎ</h3></td></tr><tr><td>' . $result_next_visit . '</td></tr>';
+			}
+			else{
+				$next_visit_html = "";
+			}
+
+			if($model->referee){
+					$referee = new Referee;
+					$result = $referee->load(array('id = ? AND deleted = 0', $model->referee));
+					$result_referee = $result->referee;
+
+					$referee_html = '<tr><td><h3>Refered to</h3></td></tr><tr><td>' . $result_referee . '</td></tr>';
+			}
+			else{
+				$referee_html = "";
+			}
+			//oth
 
 			//inv
 			if ($model->investigation_history) {
@@ -55,10 +122,11 @@ class Pdf
 					for ($i = 0; $i < count($complaints); $i++) {
 						$complaint = new Complaint;
 						$result = $complaint->load(array('id = ? AND deleted = 0', $complaints[$i]));
-						if (!$complaint_descriptions[$i]) {
-							$complaint_descriptions[$i] = "None";
+						$complaints_html .= '<tr><td><i>' . $result->complaint . '</i>';
+						if($complaint_descriptions[$i]){
+							$complaints_html .= ': ' . $complaint_descriptions[$i];
 						}
-						$complaints_html .= '<tr><td><i>' . $result->complaint . '</i>: ' . $complaint_descriptions[$i] . '</td></tr>';
+						$complaints_html .= '</td></tr>';
 					}
 				} else {
 					$complaints_html = "<tr><td>None</td></tr>";
@@ -71,10 +139,11 @@ class Pdf
 					for ($i = 0; $i < count($examinations); $i++) {
 						$examination = new Examination;
 						$result = $examination->load(array('id = ? AND deleted = 0', $examinations[$i]));
-						if (!$examination_descriptions[$i]) {
-							$examination_descriptions[$i] = "None";
+						$examinations_html .= '<tr><td><i>' . $result->examination . '</i>';
+						if($examination_descriptions[$i]){
+							$examinations_html .= ': ' . $examination_descriptions[$i];
 						}
-						$examinations_html .= '<tr><td><i>' . $result->examination . '</i>: ' . $examination_descriptions[$i] . '</td></tr>';
+						$examinations_html .= '</td></tr>';
 					}
 				} else {
 					$examinations_html = "<tr><td>None</td></tr>";
@@ -87,10 +156,11 @@ class Pdf
 					for ($i = 0; $i < count($investigations); $i++) {
 						$investigation = new Investigation;
 						$result = $investigation->load(array('id = ? AND deleted = 0', $investigations[$i]));
-						if (!$investigation_descriptions[$i]) {
-							$investigation_descriptions[$i] = "None";
+						$investigations_html .= '<tr><td><i>' . $result->investigation . '</i>';
+						if($investigation_descriptions[$i]){
+							$investigations_html .= ': ' . $investigation_descriptions[$i];
 						}
-						$investigations_html .= '<tr><td><i>' . $result->investigation . '</i>: ' . $investigation_descriptions[$i] . '</td></tr>';
+						$investigations_html .= '</td></tr>';
 					}
 				} else {
 					$investigations_html = "<tr><td>None</td></tr>";
@@ -103,10 +173,11 @@ class Pdf
 					for ($i = 0; $i < count($diagnoses); $i++) {
 						$diagnosis = new Diagnosis;
 						$result = $diagnosis->load(array('id = ? AND deleted = 0', $diagnoses[$i]));
-						if (!$diagnosis_descriptions[$i]) {
-							$diagnosis_descriptions[$i] = "None";
+						$diagnoses_html .= '<tr><td><i>' . $result->diagnosis . '</i>';
+						if($diagnosis_descriptions[$i]){
+							$diagnoses_html .= ': ' . $diagnosis_descriptions[$i];
 						}
-						$diagnoses_html .= '<tr><td><i>' . $result->diagnosis . '</i>: ' . $diagnosis_descriptions[$i] . '</td></tr>';
+						$diagnoses_html .= '</td></tr>';
 					}
 				} else {
 					$diagnoses_html = "<tr><td>None</td></tr>";
@@ -122,7 +193,7 @@ class Pdf
 			//ptn
 			if ($model->patient->gender == 'M') {
 				$patient_gender = "Male";
-			} else if ($model->patient->age == 'F') {
+			} else if ($model->patient->gender == 'F') {
 				$patient_gender = "Female";
 			} else {
 				$patient_gender = "Others";
@@ -167,11 +238,17 @@ class Pdf
 							</table>
 						</td>
 						<td>
-							<table width="450">
+							<table width="450" style="font-family: solaimanlipi;">
 								<tr>
 									<td><h3>Rx</h3></td>
 								</tr>
 								' . $medicines_html . '
+							</table>
+							<br/>
+							<table width="450" style="font-family: solaimanlipi;">
+								' . $advices_html . '
+								' . $next_visit_html . '
+								' . $referee_html . '
 							</table>
 						</td>
 					</tr>
@@ -188,14 +265,10 @@ class Pdf
 			if ($model->investigations) {
 				$investigations_html = "";
 				$investigations = explode(',', $model->investigations);
-				$investigation_descriptions = explode(',', $model->investigation_descriptions);
 				for ($i = 0; $i < count($investigations); $i++) {
 					$investigation = new Investigation;
 					$result = $investigation->load(array('id = ? AND deleted = 0', $investigations[$i]));
-					if (!$investigation_descriptions[$i]) {
-						$investigation_descriptions[$i] = "None";
-					}
-					$investigations_html .= '<tr><td><i>' . $result->investigation . '</i>: ' . $investigation_descriptions[$i] . '</td></tr>';
+					$investigations_html .= '<tr><td><i>' . $result->investigation . '</i></td></tr>';
 				}
 			} else {
 				$investigations_html = "<tr><td>None</td></tr>";
@@ -205,7 +278,7 @@ class Pdf
 			//ptn
 			if ($model->patient->gender == 'M') {
 				$patient_gender = "Male";
-			} else if ($model->patient->age == 'F') {
+			} else if ($model->patient->gender == 'F') {
 				$patient_gender = "Female";
 			} else {
 				$patient_gender = "Others";

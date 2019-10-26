@@ -22,7 +22,7 @@ class Medicine extends \Models\Base\Medicine
 	{
 		$model = new self;
 		$model->medicine = strtoupper($data['medicine']);
-		$model->generics = $data['generics'];
+		$model->generics = ucwords($data['generics']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -33,7 +33,7 @@ class Medicine extends \Models\Base\Medicine
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
 		$model->medicine = strtoupper($data['medicine']);
-		$model->generics = $data['generics'];
+		$model->generics = ucwords($data['generics']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

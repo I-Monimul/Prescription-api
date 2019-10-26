@@ -21,7 +21,8 @@ class Time extends \Models\Base\Time
 	public static function post($data)
 	{
 		$model = new self;
-		$model->time = $data['time'];
+		$model->time = ucwords($data['time']);
+		$model->alternative = ucwords($data['alternative']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +32,8 @@ class Time extends \Models\Base\Time
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->time = $data['time'];
+		$model->time = ucwords($data['time']);
+		$model->alternative = ucwords($data['alternative']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

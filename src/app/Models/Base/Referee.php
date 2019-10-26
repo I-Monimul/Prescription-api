@@ -1,14 +1,10 @@
 <?php
 namespace Models\Base;
 
-class Duration extends \Models\Base
+class Referee extends \Models\Base
 {
     protected $fieldConf = [
-        'duration' => [
-            'type' => 'VARCHAR128',
-            'nullable' => true
-        ],
-        'alternative' => [
+        'referee' => [
             'type' => 'VARCHAR128',
             'nullable' => true
         ],
@@ -25,6 +21,6 @@ class Duration extends \Models\Base
             'nullable' => true
         ]
     ],
-    $table = 'duration';
+    $table = 'referee';
 
 }

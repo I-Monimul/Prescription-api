@@ -21,7 +21,7 @@ class Complaint extends \Models\Base\Complaint
 	public static function post($data)
 	{
 		$model = new self;
-		$model->complaint = $data['complaint'];
+		$model->complaint = ucwords($data['complaint']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +31,7 @@ class Complaint extends \Models\Base\Complaint
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->complaint = $data['complaint'];
+		$model->complaint = ucwords($data['complaint']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

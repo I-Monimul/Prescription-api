@@ -21,7 +21,8 @@ class Duration extends \Models\Base\Duration
 	public static function post($data)
 	{
 		$model = new self;
-		$model->duration = $data['duration'];
+		$model->duration = ucwords($data['duration']);
+		$model->alternative = ucwords($data['alternative']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +32,8 @@ class Duration extends \Models\Base\Duration
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->duration = $data['duration'];
+		$model->duration = ucwords($data['duration']);
+		$model->alternative =ucwords($data['alternative']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

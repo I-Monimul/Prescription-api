@@ -1,10 +1,10 @@
 <?php
 namespace Models\Base;
 
-class Duration extends \Models\Base
+class Next_visit extends \Models\Base
 {
     protected $fieldConf = [
-        'duration' => [
+        'next_visit' => [
             'type' => 'VARCHAR128',
             'nullable' => true
         ],
@@ -25,6 +25,6 @@ class Duration extends \Models\Base
             'nullable' => true
         ]
     ],
-    $table = 'duration';
+    $table = 'next_visit';
 
 }

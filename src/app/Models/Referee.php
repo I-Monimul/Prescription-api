@@ -2,12 +2,12 @@
 
 namespace Models;
 
-class Patient extends \Models\Base\Patient
+class Referee extends \Models\Base\Referee
 {
 	public static function getAll()
 	{
 		$model = new self;
-		$results = $model->find('deleted = 0 order by id desc');
+		$results = $model->find('deleted = 0');
 		return empty($results) ? [] : $results->castAll();
 	}
 
@@ -21,13 +21,7 @@ class Patient extends \Models\Base\Patient
 	public static function post($data)
 	{
 		$model = new self;
-		$model->name = ucwords($data['name']);
-		$model->age = $data['age'];
-		$model->gender = $data['gender'];
-		$model->phone = $data['phone'];
-		$model->email = $data['email'];
-		$model->address = ucwords($data['address']);
-		$model->reference = ucwords($data['reference']);
+		$model->referee = ucwords($data['referee']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -37,13 +31,7 @@ class Patient extends \Models\Base\Patient
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->name = ucwords($data['name']);
-		$model->age = $data['age'];
-		$model->gender = $data['gender'];
-		$model->phone = $data['phone'];
-		$model->email = $data['email'];
-		$model->address = ucwords($data['address']);
-		$model->reference = ucwords($data['reference']);
+		$model->referee = ucwords($data['referee']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

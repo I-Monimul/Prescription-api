@@ -21,7 +21,7 @@ class Investigation extends \Models\Base\Investigation
 	public static function post($data)
 	{
 		$model = new self;
-		$model->investigation = $data['investigation'];
+		$model->investigation = ucwords($data['investigation']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}
@@ -31,7 +31,7 @@ class Investigation extends \Models\Base\Investigation
 		$model = new self;
 		$model->reset();
 		$model->load(array('id = ? AND deleted = 0', $id));
-		$model->investigation = $data['investigation'];
+		$model->investigation = ucwords($data['investigation']);
 		$model->save();
 		return empty($model) ? [] : $model->cast();
 	}

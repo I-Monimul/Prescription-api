@@ -21,37 +21,57 @@ class Investigation_history extends \Models\Base\Investigation_history
 		$model = new self;
 		$model->load(array('id = ? AND deleted = 0', $id));
 
-		$complaints = explode(',', $model->complaints);
-		for ($i = 0; $i < count($complaints); $i++) {
-			$complaint = new Complaint;
-			$result = $complaint->load(array('id = ? AND deleted = 0', $complaints[$i]));
-			$result_complaint[$i] = $result->complaint;
+		if($model->complaints){
+			$complaints = explode(',', $model->complaints);
+			for ($i = 0; $i < count($complaints); $i++) {
+				$complaint = new Complaint;
+				$result = $complaint->load(array('id = ? AND deleted = 0', $complaints[$i]));
+				$result_complaint[$i] = $result->complaint;
+			}
+			$model->complaints = implode(',', $result_complaint);
 		}
-		$model->complaints = implode(',', $result_complaint);
+		else{
+			$model->complaints = "";
+		}
 
-		$examinations = explode(',', $model->examinations);
-		for ($i = 0; $i < count($examinations); $i++) {
-			$examination = new Examination;
-			$result = $examination->load(array('id = ? AND deleted = 0', $examinations[$i]));
-			$result_examination[$i] = $result->examination;
+		if($model->examinations){
+			$examinations = explode(',', $model->examinations);
+			for ($i = 0; $i < count($examinations); $i++) {
+				$examination = new Examination;
+				$result = $examination->load(array('id = ? AND deleted = 0', $examinations[$i]));
+				$result_examination[$i] = $result->examination;
+			}
+			$model->examinations = implode(',', $result_examination);
 		}
-		$model->examinations = implode(',', $result_examination);
+		else{
+			$model->examinations = "";
+		}
 
-		$investigations = explode(',', $model->investigations);
-		for ($i = 0; $i < count($investigations); $i++) {
-			$investigation = new Investigation;
-			$result = $investigation->load(array('id = ? AND deleted = 0', $investigations[$i]));
-			$result_investigation[$i] = $result->investigation;
+		if($model->investigations){
+			$investigations = explode(',', $model->investigations);
+			for ($i = 0; $i < count($investigations); $i++) {
+				$investigation = new Investigation;
+				$result = $investigation->load(array('id = ? AND deleted = 0', $investigations[$i]));
+				$result_investigation[$i] = $result->investigation;
+			}
+			$model->investigations = implode(',', $result_investigation);
 		}
-		$model->investigations = implode(',', $result_investigation);
+		else{
+			$model->investigations = "";
+		}
 
-		$diagnoses = explode(',', $model->diagnoses);
-		for ($i = 0; $i < count($diagnoses); $i++) {
-			$diagnosis = new Diagnosis;
-			$result = $diagnosis->load(array('id = ? AND deleted = 0', $diagnoses[$i]));
-			$result_diagnosis[$i] = $result->diagnosis;
+		if($model->diagnoses){
+			$diagnoses = explode(',', $model->diagnoses);
+			for ($i = 0; $i < count($diagnoses); $i++) {
+				$diagnosis = new Diagnosis;
+				$result = $diagnosis->load(array('id = ? AND deleted = 0', $diagnoses[$i]));
+				$result_diagnosis[$i] = $result->diagnosis;
+			}
+			$model->diagnoses = implode(',', $result_diagnosis);
 		}
-		$model->diagnoses = implode(',', $result_diagnosis);
+		else{
+			$model->diagnoses = "";
+		}
 
 		return empty($model) ? [] : $model->cast();
 	}
@@ -71,7 +91,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 						$result_complaint[$i] = $result->id;
 					} else {
 						$complaint->reset();
-						$complaint->complaint = $complaints[$i];
+						$complaint->complaint = ucwords($complaints[$i]);
 						$complaint->save();
 						$result_complaint[$i] = $complaint->id;
 					}
@@ -81,7 +101,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 			}
 			$model->complaints = implode(',', $result_complaint);
 
-			$model->complaint_descriptions = $data['complaint_descriptions'];
+			$model->complaint_descriptions = ucwords($data['complaint_descriptions']);
 		}
 
 		if ($data['examinations']) {
@@ -94,7 +114,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 						$result_examination[$i] = $result->id;
 					} else {
 						$examination->reset();
-						$examination->examination = $examinations[$i];
+						$examination->examination = ucwords($examinations[$i]);
 						$examination->save();
 						$result_examination[$i] = $examination->id;
 					}
@@ -104,7 +124,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 			}
 			$model->examinations = implode(',', $result_examination);
 
-			$model->examination_descriptions = $data['examination_descriptions'];
+			$model->examination_descriptions = ucwords($data['examination_descriptions']);
 		}
 
 		if ($data['investigations']) {
@@ -117,7 +137,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 						$result_investigation[$i] = $result->id;
 					} else {
 						$investigation->reset();
-						$investigation->investigation = $investigations[$i];
+						$investigation->investigation = ucwords($investigations[$i]);
 						$investigation->save();
 						$result_investigation[$i] = $investigation->id;
 					}
@@ -149,7 +169,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 						$result_complaint[$i] = $result->id;
 					} else {
 						$complaint->reset();
-						$complaint->complaint = $complaints[$i];
+						$complaint->complaint = ucwords($complaints[$i]);
 						$complaint->save();
 						$result_complaint[$i] = $complaint->id;
 					}
@@ -159,7 +179,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 			}
 			$model->complaints = implode(',', $result_complaint);
 
-			$model->complaint_descriptions = $data['complaint_descriptions'];
+			$model->complaint_descriptions = ucwords($data['complaint_descriptions']);
 		}
 
 		if ($data['examinations']) {
@@ -172,7 +192,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 						$result_examination[$i] = $result->id;
 					} else {
 						$examination->reset();
-						$examination->examination = $examinations[$i];
+						$examination->examination = ucwords($examinations[$i]);
 						$examination->save();
 						$result_examination[$i] = $examination->id;
 					}
@@ -182,7 +202,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 			}
 			$model->examinations = implode(',', $result_examination);
 
-			$model->examination_descriptions = $data['examination_descriptions'];
+			$model->examination_descriptions = ucwords($data['examination_descriptions']);
 		}
 
 		if ($data['investigations']) {
@@ -195,7 +215,7 @@ class Investigation_history extends \Models\Base\Investigation_history
 						$result_investigation[$i] = $result->id;
 					} else {
 						$investigation->reset();
-						$investigation->investigation = $investigations[$i];
+						$investigation->investigation = ucwords($investigations[$i]);
 						$investigation->save();
 						$result_investigation[$i] = $investigation->id;
 					}
